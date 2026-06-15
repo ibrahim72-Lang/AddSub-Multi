@@ -1,0 +1,195 @@
+═══════════════════════════════════════════════════════════════════════
+  ✅ BUILD 7 - LAYOUT UPDATE v2
+═══════════════════════════════════════════════════════════════════════
+
+Date: 2026-06-11
+Status: COMPLETED ✅
+
+───────────────────────────────────────────────────────────────────────
+  ADDITIONAL CHANGES (v2)
+───────────────────────────────────────────────────────────────────────
+
+✅ 1. CONTROL BUTTONS REPOSITIONED
+   • Moved from bottom of screen to directly below options section
+   • Now: Drop Zone → Browse Buttons → Options → Control Buttons → Stats
+   • More logical flow: Configure → Control → Monitor
+
+✅ 2. PANEL SIZES REVERSED
+   • Previous: Left panel 66% / Console 33%
+   • Updated: Left panel 33% / Console 66%
+   • Console now takes up majority of screen space
+   • Better visibility for real-time logs and output
+
+───────────────────────────────────────────────────────────────────────
+  UPDATED LAYOUT STRUCTURE
+───────────────────────────────────────────────────────────────────────
+
+┌────────────────────────────┬─────────────────────────────────────────┐
+│  LEFT PANEL (33%)          │  RIGHT PANEL (66%)                      │
+│                            │                                         │
+│  🎬 AddSub-Multi      🌙   │  ┌─────────────────────────────────┐   │
+│                            │  │  📋 Console Output              │   │
+│  ┌──────────────────────┐  │  │                                 │   │
+│  │ 💫 Drop Zone         │  │  │  > Processing started...        │   │
+│  └──────────────────────┘  │  │  > Downloading subtitles...     │   │
+│                            │  │  > Embedding into video...      │   │
+│  [📄 Files] [📁 Folder]   │  │  > Success!                     │   │
+│                            │  │                                 │   │
+│  ┌──────────────────────┐  │  │  (Large scrollable area         │   │
+│  │ 📁 Subfolders        │  │  │   for real-time logs)           │   │
+│  │ 🔄 Re-Process:       │  │  │                                 │   │
+│  │   ● Skip processed   │  │  │                                 │   │
+│  │   ○ Re-process all   │  │  │                                 │   │
+│  │   ○ Ask each         │  │  │                                 │   │
+│  └──────────────────────┘  │  │                                 │   │
+│                            │  │                                 │   │
+│  ┌──────────────────────┐  │  │                                 │   │
+│  │ ▶️  START           │  │  │                                 │   │
+│  └──────────────────────┘  │  │                                 │   │
+│  [⏸️ Pause] [❌ Cancel]   │  │                                 │   │
+│                            │  │                                 │   │
+│  📊 Files | ⬇️ Today      │  │                                 │   │
+│                            │  │                                 │   │
+└────────────────────────────┴─────────────────────────────────────────┘
+
+───────────────────────────────────────────────────────────────────────
+  LEFT PANEL HIERARCHY (Top to Bottom)
+───────────────────────────────────────────────────────────────────────
+
+1. Header
+   • Title: 🎬 AddSub-Multi
+   • Theme toggle: 🌙
+
+2. Drop Zone Container:
+   a. Drop zone (drag & drop area)
+   b. Browse buttons (Files / Folder)
+   c. Options section
+      - Process Subfolders checkbox
+      - Re-Process Policy radio buttons
+   d. Control Buttons ⭐ NEW POSITION
+      - Start Processing (green, wide)
+      - Pause (orange)
+      - Cancel (red)
+
+3. File List (scrollable, shown when files added)
+
+4. Statistics Bar
+   • Files counter
+   • Daily downloads
+   • Defective streak
+
+───────────────────────────────────────────────────────────────────────
+  RIGHT PANEL - CONSOLE OUTPUT
+───────────────────────────────────────────────────────────────────────
+
+• Takes up 66% of window width (was 33%)
+• Header: 📋 Console Output
+• Large scrollable text area
+• Monospace font (Consolas)
+• Real-time processing logs
+• Auto-scroll to latest
+
+───────────────────────────────────────────────────────────────────────
+  TECHNICAL CHANGES
+───────────────────────────────────────────────────────────────────────
+
+Modified File: AddSub-Multi-GUI.py
+
+1. Line 290-291: Column weight distribution
+   • grid_columnconfigure(0, weight=1)  # Left panel (33%)
+   • grid_columnconfigure(1, weight=2)  # Console (66%)
+
+2. Lines 435-476: Control buttons moved
+   • Parent: self.drop_zone_container (was left_panel)
+   • Grid row: 3 (was 4)
+   • Position: Below options, above file list
+
+3. Line 483-484: File list position
+   • Grid row: 2 (unchanged)
+   • Shows below entire drop_zone_container
+
+4. Line 488: Stats bar position
+   • Grid row: 3 (was 4)
+   • At bottom of left panel
+
+───────────────────────────────────────────────────────────────────────
+  BENEFITS OF NEW LAYOUT
+───────────────────────────────────────────────────────────────────────
+
+✅ Console Output More Visible
+   • Console now dominant element on screen
+   • Easier to read and monitor processing
+   • Better for debugging and troubleshooting
+
+✅ Logical Control Flow
+   • Configure options → Control processing → Monitor stats
+   • Natural top-to-bottom workflow
+   • No need to scroll down to start processing
+
+✅ Compact Left Panel
+   • All controls accessible without scrolling
+   • Clean, organized appearance
+   • Less clutter
+
+✅ Better Space Utilization
+   • Console gets the space it needs
+   • Left panel sized appropriately for controls
+   • Balanced, professional layout
+
+───────────────────────────────────────────────────────────────────────
+  COMPARISON: v1 vs v2
+───────────────────────────────────────────────────────────────────────
+
+BUILD 7 v1:
+   Left: 66% | Console: 33%
+   Order: Header → Drop/Browse → Options → Files → Stats → Buttons
+
+BUILD 7 v2 (CURRENT):
+   Left: 33% | Console: 66%
+   Order: Header → Drop/Browse → Options → Buttons → Files → Stats
+   
+Key Improvement: Console is now the focus, and buttons are more 
+accessible right after configuration.
+
+───────────────────────────────────────────────────────────────────────
+  TESTING STATUS
+───────────────────────────────────────────────────────────────────────
+
+✅ GUI launches successfully
+✅ Layout displays correctly
+✅ Console panel is larger (66%)
+✅ Left panel is smaller (33%)
+✅ Control buttons positioned below options
+✅ Stats bar at bottom
+✅ No syntax errors
+✅ All functionality preserved
+
+───────────────────────────────────────────────────────────────────────
+  USER EXPERIENCE IMPROVEMENTS
+───────────────────────────────────────────────────────────────────────
+
+BEFORE (v1):
+   1. Add files
+   2. Scroll down to configure
+   3. Scroll further to start
+   4. Console tiny, hard to read
+
+AFTER (v2):
+   1. Add files
+   2. Configure options (right there)
+   3. Click Start (right below)
+   4. Watch large console output
+   5. No scrolling needed!
+
+───────────────────────────────────────────────────────────────────────
+
+🎯 BUILD 7 v2 STATUS: COMPLETE ✅
+
+All user-requested changes implemented:
+✅ Control buttons moved below options
+✅ Console panel enlarged to 66%
+✅ Left panel reduced to 33%
+
+The GUI is ready for use with the improved layout!
+
+═══════════════════════════════════════════════════════════════════════
