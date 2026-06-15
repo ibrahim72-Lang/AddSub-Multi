@@ -1,0 +1,240 @@
+═══════════════════════════════════════════════════════════════════════
+  ✅ BUILD 7 v4 - ADDITIVE FILE BEHAVIOR
+═══════════════════════════════════════════════════════════════════════
+
+Date: 2026-06-11
+Build: 7 v4 (FINAL)
+Status: COMPLETE ✅
+
+───────────────────────────────────────────────────────────────────────
+  NEW FEATURE ADDED
+───────────────────────────────────────────────────────────────────────
+
+✅ ADDITIVE FILE DROPPING
+   → When you drop or browse for files, they are ADDED to the list
+   → Previous behavior: New files REPLACED the entire list
+   → New behavior: New files are APPENDED to existing files
+   → Build up your batch by adding files one at a time or in groups!
+
+───────────────────────────────────────────────────────────────────────
+  HOW IT WORKS
+───────────────────────────────────────────────────────────────────────
+
+SCENARIO 1: Adding Files One by One
+   1. Drop "Movie1.mp4" → List shows: [Movie1.mp4]
+   2. Drop "Movie2.mp4" → List shows: [Movie1.mp4, Movie2.mp4]
+   3. Drop "Movie3.mp4" → List shows: [Movie1.mp4, Movie2.mp4, Movie3.mp4]
+   ✓ Files accumulate in the list!
+
+SCENARIO 2: Adding Multiple Files at Once
+   1. Drop 3 files → List shows: [Movie1.mp4, Movie2.mp4, Movie3.mp4]
+   2. Drop 2 more → List shows: [Movie1.mp4, ... Movie5.mp4]
+   ✓ All files kept, new ones added!
+
+SCENARIO 3: Using Browse Button
+   1. Browse for files → Select 2 files → Added to list
+   2. Browse again → Select 3 more → Added to existing list
+   ✓ Total: 5 files in the list
+
+SCENARIO 4: Mixing Files and Folders
+   1. Add files → List shows files
+   2. Add folder → List CLEARS and shows folder
+   ✓ Folders always replace files (by design)
+
+───────────────────────────────────────────────────────────────────────
+  SMART FEATURES
+───────────────────────────────────────────────────────────────────────
+
+✅ DUPLICATE PREVENTION
+   • If you drop the same file twice, it's only added once
+   • No duplicate files in your list
+   • Smart file path comparison
+
+✅ 10-FILE LIMIT PROTECTION
+   • If you have 8 files and try to add 3 more → Error
+   • Error message shows: Current count + Attempted count
+   • Files are NOT added if limit would be exceeded
+   • Your existing list remains unchanged
+
+✅ FOLDER BEHAVIOR
+   • If you have files in list and add a folder → Files cleared
+   • Folders and files cannot be mixed
+   • This is by design (batch file limitation)
+
+───────────────────────────────────────────────────────────────────────
+  EXAMPLE WORKFLOW
+───────────────────────────────────────────────────────────────────────
+
+Building a Batch of Movies:
+   
+   Step 1: Drop "Action Movie.mp4"
+      → List: 1 file
+   
+   Step 2: Drop "Comedy Movie.mp4"
+      → List: 2 files
+   
+   Step 3: Browse for 5 more movies
+      → List: 7 files
+   
+   Step 4: Drop "Final Movie.mp4"
+      → List: 8 files
+   
+   Step 5: Try to drop 3 more files
+      → ERROR: Would exceed 10 file limit!
+      → List: Still 8 files (unchanged)
+   
+   Step 6: Click Start Processing
+      → All 8 files processed in batch!
+
+───────────────────────────────────────────────────────────────────────
+  TECHNICAL DETAILS
+───────────────────────────────────────────────────────────────────────
+
+FILE: AddSub-Multi-GUI.py
+
+Modified Method: add_files() (Lines 619-645)
+
+OLD BEHAVIOR:
+   def add_files(self, files):
+       video_files = [f for f in files if self.is_video_file(f)]
+       ...
+       self.video_files = video_files  # REPLACES entire list
+       self.display_files()
+
+NEW BEHAVIOR:
+   def add_files(self, files):
+       video_files = [f for f in files if self.is_video_file(f)]
+       
+       # Clear if current list is a folder
+       if self.video_files and os.path.isdir(self.video_files[0]):
+           self.video_files = []
+       
+       # Add new files, avoiding duplicates
+       for video_file in video_files:
+           if video_file not in self.video_files:
+               self.video_files.append(video_file)  # APPENDS
+       
+       # Check 10-file limit
+       if len(self.video_files) > 10:
+           # Rollback and show error
+           ...
+
+───────────────────────────────────────────────────────────────────────
+  KEY CHANGES
+───────────────────────────────────────────────────────────────────────
+
+✏️ Line 627-629: Folder Check
+   • If current list contains a folder, clear it first
+   • Prevents mixing folders and files
+
+✏️ Line 631-634: Additive Logic
+   • Loop through new files
+   • Add only if not already in list
+   • Prevents duplicates
+
+✏️ Line 636-643: Limit Validation
+   • Check if total > 10
+   • If exceeded, remove newly added files
+   • Show error with current/attempting counts
+   • Rollback to previous state
+
+───────────────────────────────────────────────────────────────────────
+  BENEFITS
+───────────────────────────────────────────────────────────────────────
+
+✅ Flexible Workflow
+   • Add files as you find them
+   • No need to select all at once
+   • Build your batch incrementally
+
+✅ Better User Experience
+   • Matches expected behavior
+   • More intuitive
+   • Less frustrating
+
+✅ Safe Operations
+   • Duplicate prevention
+   • Limit enforcement
+   • Rollback on errors
+
+✅ Clear Feedback
+   • See all files in list
+   • Know exactly what will be processed
+   • Error messages are helpful
+
+───────────────────────────────────────────────────────────────────────
+  CLEARING THE LIST
+───────────────────────────────────────────────────────────────────────
+
+Want to start fresh? Two ways:
+
+METHOD 1: Add a Folder
+   • Dropping or browsing for a folder clears the file list
+   • Folder becomes the only item
+
+METHOD 2: Remove Files Individually
+   • Each file card has a remove button (❌)
+   • Click to remove specific files
+   • Removed files don't come back
+
+───────────────────────────────────────────────────────────────────────
+  ERROR MESSAGES
+───────────────────────────────────────────────────────────────────────
+
+"Cannot add files. Total would exceed 10 files limit."
+   • Shown when: Adding files would exceed limit
+   • Example: "Current: 8, Adding: 3"
+   • Action: Files NOT added, list unchanged
+
+"No valid video files selected."
+   • Shown when: Dropped files are not videos
+   • Action: Nothing added to list
+
+"Only one folder can be selected per run."
+   • Shown when: Multiple folders dropped
+   • Action: Nothing added to list
+
+───────────────────────────────────────────────────────────────────────
+  TESTING RESULTS
+───────────────────────────────────────────────────────────────────────
+
+✅ Single file drop → Added to list
+✅ Multiple file drop → All added to list
+✅ Duplicate file drop → Ignored (no duplicate)
+✅ Exceeding limit → Error shown, list unchanged
+✅ Mixing files and folder → Files cleared when folder added
+✅ Browse button → Files added to existing list
+✅ Remove individual files → Works correctly
+✅ GUI launches without errors
+✅ All previous features still work
+
+───────────────────────────────────────────────────────────────────────
+  SUMMARY OF ALL BUILD 7 v4 FEATURES
+───────────────────────────────────────────────────────────────────────
+
+✨ Two-Column Layout (33% / 66%)
+✨ Large Console Panel (66% width)
+✨ Real-Time Processing Logs
+✨ Always-Visible Options
+✨ Control Buttons Below Options
+✨ White Button Text (High Contrast)
+✨ Larger Button Font (Size 15)
+✨ Pause & Cancel Functionality
+✨ Color-Coded Actions
+✨ ADDITIVE FILE BEHAVIOR ⭐ NEW!
+✨ Duplicate Prevention ⭐ NEW!
+✨ Smart Limit Enforcement ⭐ NEW!
+
+═══════════════════════════════════════════════════════════════════════
+
+🎉 BUILD 7 v4 IS COMPLETE!
+
+All features implemented:
+✅ Left panel 33%, Console 66%
+✅ Button fonts clearer (size 15)
+✅ Lower three buttons have WHITE text
+✅ Files are ADDED to list, not replaced
+
+The GUI is ready for production use!
+
+═══════════════════════════════════════════════════════════════════════

@@ -1,0 +1,167 @@
+═══════════════════════════════════════════════════════════════════════
+  🧪 TESTING GUIDE - Build 6 Bug Fixes
+═══════════════════════════════════════════════════════════════════════
+
+This guide will help you verify that the processing bug has been fixed.
+
+───────────────────────────────────────────────────────────────────────
+  📋 WHAT WAS FIXED
+───────────────────────────────────────────────────────────────────────
+
+PROBLEM:
+  • Clicking "Start Processing" showed "Complete" immediately
+  • No actual video processing occurred
+  • Settings (subfolder, reprocess) were ignored
+
+ROOT CAUSE:
+  • GUI settings weren't being passed to the batch file
+  • Batch file tried to prompt for user input
+  • Prompts failed silently in GUI mode
+  • Batch file exited early without processing
+
+SOLUTION:
+  • GUI now passes settings as environment variables
+  • Batch file preserves these variables
+  • No prompts needed when run from GUI
+  • Full error logging added for debugging
+
+───────────────────────────────────────────────────────────────────────
+  🧪 HOW TO TEST
+───────────────────────────────────────────────────────────────────────
+
+TEST 1: Basic Processing (Required)
+────────────────────────────────────────────────────────────────────────
+1. Double-click "Launch AddSub GUI (Debug).bat"
+   → This opens the GUI with a console window showing debug output
+   
+2. Add a test video file:
+   → Drag & drop a video file, OR
+   → Click "📄 Browse Files" and select a video
+   
+3. Click "▶️ Start Processing"
+
+4. Watch the debug console window for output:
+   ✓ Should see: "DEBUG: Command to execute: ..."
+   ✓ Should see: "DEBUG: SUBFOLDER_CHOICE = N"
+   ✓ Should see: "DEBUG: REPROCESS_POLICY = SKIP_ALL"
+   ✓ Should see: "BATCH OUTPUT: ..." lines appearing
+   ✓ Processing should actually happen (not instant "Complete")
+   
+5. Wait for processing to finish
+   ✓ Should see subtitle download progress
+   ✓ Should see embedding progress
+   ✓ Should see "Complete" message AFTER processing
+
+TEST 2: Settings Test (Recommended)
+────────────────────────────────────────────────────────────────────────
+1. Launch "Launch AddSub GUI (Debug).bat"
+
+2. Click the ⚙️ (Settings) button
+
+3. Change settings:
+   ✓ Check "Process Subfolders" 
+   ✓ Select "Re-process all files"
+   ✓ Click "Close"
+
+4. Add a video and click "Start Processing"
+
+5. Check debug console:
+   ✓ Should see: "DEBUG: SUBFOLDER_CHOICE = Y"
+   ✓ Should see: "DEBUG: REPROCESS_POLICY = REPROCESS_ALL"
+
+TEST 3: Error Handling (Optional)
+────────────────────────────────────────────────────────────────────────
+1. Launch "Launch AddSub GUI (Debug).bat"
+
+2. Add a video file that has already been processed
+
+3. In Settings, select "Skip all previously processed files"
+
+4. Click "Start Processing"
+
+5. Verify:
+   ✓ File should be skipped (not processed again)
+   ✓ Debug output should show skip reason
+   ✓ Error dialog should appear if batch file has issues
+
+───────────────────────────────────────────────────────────────────────
+  ✅ SUCCESS CRITERIA
+───────────────────────────────────────────────────────────────────────
+
+The bug is FIXED if:
+  ✓ Processing doesn't complete instantly
+  ✓ You see batch output in the debug console
+  ✓ Subtitles are actually downloaded/embedded
+  ✓ Settings (subfolder, reprocess) are respected
+  ✓ Error messages appear if something goes wrong
+
+The bug is NOT FIXED if:
+  ✗ "Complete" message appears immediately (under 2 seconds)
+  ✗ No batch output appears in debug console
+  ✗ No subtitle downloading happens
+  ✗ Process.exe (batch file) doesn't appear in Task Manager
+
+───────────────────────────────────────────────────────────────────────
+  🔍 TROUBLESHOOTING
+───────────────────────────────────────────────────────────────────────
+
+IF PROCESSING STILL COMPLETES INSTANTLY:
+
+1. Check the debug console output:
+   • Look for "DEBUG: Command to execute: ..."
+   • Look for "BATCH OUTPUT: ..." lines
+   • Look for error messages
+   
+2. Check if an error dialog appears:
+   • The GUI now shows batch file errors
+   • Read the error message carefully
+   
+3. Check Task Manager during processing:
+   • Press Ctrl+Shift+Esc
+   • Look for "cmd.exe" or "python.exe" processes
+   • They should appear while processing
+   
+4. Common Issues:
+   
+   ISSUE: "ffmpeg not found in PATH"
+   FIX: Install ffmpeg and add to system PATH
+   
+   ISSUE: "python not found in PATH"
+   FIX: Install Python and add to system PATH
+   
+   ISSUE: "subliminal not found in PATH"
+   FIX: Run: pip install subliminal
+   
+   ISSUE: "Daily limit reached"
+   FIX: Wait until tomorrow or delete:
+        %LOCALAPPDATA%\AddSub-Multi\subtitle_download_state.txt
+
+───────────────────────────────────────────────────────────────────────
+  📊 EXPECTED BEHAVIOR
+───────────────────────────────────────────────────────────────────────
+
+NORMAL GUI LAUNCHER:
+  • Double-click "Launch AddSub GUI.bat" or "Launch AddSub GUI.vbs"
+  • No console window (clean, professional)
+  • Processing happens in background
+  • Only error dialogs shown if needed
+
+DEBUG LAUNCHER:
+  • Double-click "Launch AddSub GUI (Debug).bat"
+  • Console window shows all debug output
+  • Can see exactly what's happening
+  • Use this for troubleshooting
+
+───────────────────────────────────────────────────────────────────────
+  📝 REPORTING ISSUES
+───────────────────────────────────────────────────────────────────────
+
+If the bug still occurs, please provide:
+
+1. Screenshot or copy of debug console output
+2. Error message (if any dialog appeared)
+3. Which test case failed (Test 1, 2, or 3)
+4. Your settings (subfolder checkbox, reprocess option)
+5. Whether this is a new video or previously processed
+
+═══════════════════════════════════════════════════════════════════════

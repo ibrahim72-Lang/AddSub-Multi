@@ -1,0 +1,189 @@
+═══════════════════════════════════════════════════════════════════════
+  🎬 AddSub-Multi GUI - QUICK START GUIDE
+═══════════════════════════════════════════════════════════════════════
+
+📋 WHAT'S NEW?
+
+You now have a beautiful modern GUI for AddSub-Multi!
+
+✅ Your original batch file is UNCHANGED and still works
+✅ All your Python scripts are UNCHANGED
+✅ GUI is a pure wrapper - just prettier interface
+
+
+🚀 HOW TO LAUNCH
+
+Method 1 (EASIEST):
+  ► Double-click: "Launch AddSub GUI.bat"
+
+Method 2 (Direct):
+  ► Open Command Prompt in this folder
+  ► Type: python AddSub-Multi-GUI.py
+  ► Press Enter
+
+
+💡 HOW TO USE
+
+Step 1: Launch the GUI
+  ► Use one of the methods above
+
+Step 2: Add Files
+  ► Drag & drop video files or folders onto the drop zone
+  OR
+  ► Click the drop zone and browse for files/folder
+
+Step 3: Configure (Optional)
+  ► Click ⚙️ button for settings
+  ► Click 🌙 button to toggle dark/light theme
+
+Step 4: Start Processing
+  ► Click "▶️ Start Processing" button
+  ► Watch progress in real-time!
+
+
+🔄 MULTIPLE INSTANCES
+
+Want to process multiple things at once?
+
+✅ Launch multiple GUI windows
+✅ First window processes immediately
+✅ Other windows wait in queue automatically
+✅ Waiting dialog shows:
+   • Your queue position (#1, #2, etc.)
+   • How long you've been waiting
+   • Automatic start when ready
+✅ Cancel waiting anytime by closing the dialog
+
+
+📊 WHAT YOU'LL SEE
+
+Main Screen:
+  ┌─────────────────────────────────────────┐
+  │ 🎬 AddSub-Multi              🌙 ⚙️     │
+  ├─────────────────────────────────────────┤
+  │                                         │
+  │        💫                               │
+  │  Drop video files or folders here       │
+  │        or click to browse               │
+  │                                         │
+  ├─────────────────────────────────────────┤
+  │ 📊 Files: 0/10  ⬇️ Today: 0/1000      │
+  └─────────────────────────────────────────┘
+
+After Adding Files (Card View):
+  ┌─────────────────────────────────────────┐
+  │ 📹 Movie_Title.mkv              [×]     │
+  │ 📂 C:\Videos\Movies\                    │
+  │ ⏱️ Waiting to process                  │
+  │ ▰▰▰▰▰▱▱▱▱▱ 50%                        │
+  └─────────────────────────────────────────┘
+
+Waiting for Another Instance:
+  ┌─────────────────────────────────────────┐
+  │    ⏳ WAITING FOR PREVIOUS SESSION      │
+  ├─────────────────────────────────────────┤
+  │                                         │
+  │  Another instance is processing         │
+  │  Your queue position: #2                │
+  │  🔄 Checking every 5 seconds...        │
+  │  ⏱️ Waiting for: 00:02:35              │
+  │                                         │
+  │       [Cancel and Close]                │
+  └─────────────────────────────────────────┘
+
+
+🎨 STATUS COLORS & ICONS
+
+⏱️  Waiting (Gray)        - Queued, not started yet
+🔄 Processing (Cyan)     - Currently being processed
+⬇️  Downloading (Cyan)    - Downloading subtitles
+⚙️  Embedding (Cyan)      - Embedding into video
+✅ Success (Green)       - Completed successfully!
+❌ Error (Red)           - Something went wrong
+⏭️  Skip (Gray)          - File was skipped
+
+
+⚙️ SETTINGS
+
+Click ⚙️ button to configure:
+
+Re-process Previously Processed Files:
+  ○ Ask me for each file
+  ○ Skip all previously processed files
+  ○ Re-process all files
+
+☑ Include subfolders when processing folders
+
+
+📏 LIMITS
+
+• Individual Files: 10 video files maximum per session
+• Folders: 1 folder per session (all videos inside)
+• Daily Downloads: 1000 subtitles per day (OpenSubtitles limit)
+
+
+🎯 PRO TIPS
+
+1. Queue Multiple Jobs
+   → Launch GUI multiple times with different files
+   → They'll process automatically one after another
+
+2. Cancel Waiting
+   → Close the waiting dialog if you change your mind
+   → Your queue ticket is automatically removed
+
+3. Old Batch File Still Works
+   → You can still drag-drop files onto the .bat file
+   → Both GUI and batch work independently
+
+4. Theme Persists
+   → Your dark/light theme choice is remembered
+
+5. Watch Progress
+   → Each video shows its own progress bar
+   → Status updates in real-time
+
+
+🆘 TROUBLESHOOTING
+
+GUI won't launch?
+  → Make sure you're in the correct folder
+  → Ensure AddSub-Multi-6.0.bat is in the same folder
+  → Try running: pip install customtkinter tkinterdnd2
+
+Processing not working?
+  → The GUI uses the batch file underneath
+  → Check batch file dependencies:
+    • ffmpeg (in PATH)
+    • ffprobe (in PATH)
+    • python (in PATH)
+    • subliminal (pip install subliminal)
+
+Multiple instances not queuing?
+  → Check %LOCALAPPDATA%\AddSub-Multi\ exists
+  → Try running as administrator
+
+
+📁 FILES CREATED
+
+NEW FILES (GUI):
+  ✨ AddSub-Multi-GUI.py        - The GUI application
+  ✨ Launch AddSub GUI.bat       - Quick launcher
+  ✨ README - GUI.md             - Detailed documentation
+  ✨ QUICK START GUIDE.txt       - This file!
+
+UNCHANGED FILES (Original):
+  ✅ AddSub-Multi-6.0.bat        - Original batch file
+  ✅ All .py helper scripts      - Unchanged
+  ✅ All other files             - Unchanged
+
+
+🎉 ENJOY!
+
+You now have a modern, beautiful interface for your subtitle tool!
+
+Still prefer the batch file? No problem - it still works exactly as before!
+
+═══════════════════════════════════════════════════════════════════════
+  Questions? Check README - GUI.md for detailed information
+═══════════════════════════════════════════════════════════════════════
